@@ -1,0 +1,76 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+*.pyc
+
+# Virtual Environment
+venv/
+env/
+ENV/
+.venv/
+
+# KEEP data files
+!venv/data/
+!venv/data/*.csv
+!venv/data/*.xlsx
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+*.ipynb
+
+# Results and outputs
+results/
+optimizer_results/
+test_*/
+archived/
+old/
+
+# Excel files (except in venv/data/)
+*.xlsx
+!venv/data/*.xlsx
+
+# CSV files (except in venv/data/)
+*.csv
+!venv/data/*.csv
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+*.bak
+*.backup
+*_backup.*
+
+# HTML outputs
+*.html
+!scenario_visualization.html
+
+# System files
+Thumbs.db
+.DS_Store
+
+# Documentation builds
+docs/_build/
+
+# Environment variables
+.env
+
+# Test files
+test_*.py
+debug_*.py

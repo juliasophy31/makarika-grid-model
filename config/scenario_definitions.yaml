@@ -1,0 +1,534 @@
+﻿
+defaults:
+  batteries:
+  - bus: bus_10lv
+    efficiency: 0.9
+    max_e_mwh: 0.02
+    max_p_mw: 0.005
+    name: Battery_bus10
+    soc_initial: 50
+  - bus: bus_18lv
+    efficiency: 0.9
+    max_e_mwh: 0.02
+    max_p_mw: 0.005
+    name: Battery_bus18
+    soc_initial: 50
+  loads:
+    enabled_loads: null
+    profile_file: loads_profile.xlsx
+  market:
+    export_price: 0.13
+    offpeak_discharge_threshold: 50
+    offpeak_import_charge_rate: 0.8
+    offpeak_import_price: 0.23
+    offpeak_max_soc: 100
+    peak_discharge_min_soc: 10
+    peak_export_min_soc: 10
+    peak_hours:
+    - 7
+    - 8
+    - 9
+    - 10
+    - 17
+    - 18
+    - 19
+    - 20
+    peak_import_price: 0.33
+  pv_systems:
+    delimiter: ;
+    profile_file: pv_standard_profile.csv
+
+scenarios:
+  local_summer_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    control_strategy: local
+    controllers:
+    - battery_name: Battery_bus10
+      bus: bus_10lv
+      bus_label: bus_10lv
+      local_loads:
+      - load_bus10_kw
+      pv_name: PV_bus_10
+      type: SimpleBattery
+    - battery_name: Battery_bus18
+      bus: bus_18lv
+      bus_label: bus_18lv
+      local_loads:
+      - load_bus18_kw
+      pv_name: PV_bus_18
+      type: SimpleBattery
+    description: Each battery optimizes its local bus independently. Summer PV and load profiles with marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: summer_marae
+    marae_event: true
+    name: Local Control - Summer - With Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_summer
+      profile_file: pv_standard_profile.csv
+    season: summer
+
+  local_summer_no_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    control_strategy: local
+    controllers:
+    - battery_name: Battery_bus10
+      bus: bus_10lv
+      bus_label: bus_10lv
+      local_loads:
+      - load_bus10_kw
+      pv_name: PV_bus_10
+      type: SimpleBattery
+    - battery_name: Battery_bus18
+      bus: bus_18lv
+      bus_label: bus_18lv
+      local_loads:
+      - load_bus18_kw
+      pv_name: PV_bus_18
+      type: SimpleBattery
+    description: Each battery optimizes its local bus independently. Summer PV and load profiles without marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: summer_no_marae
+    marae_event: false
+    name: Local Control - Summer - No Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_summer
+      profile_file: pv_standard_profile.csv
+    season: summer
+
+  local_winter_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    control_strategy: local
+    controllers:
+    - battery_name: Battery_bus10
+      bus: bus_10lv
+      bus_label: bus_10lv
+      local_loads:
+      - load_bus10_kw
+      pv_name: PV_bus_10
+      type: SimpleBattery
+    - battery_name: Battery_bus18
+      bus: bus_18lv
+      bus_label: bus_18lv
+      local_loads:
+      - load_bus18_kw
+      pv_name: PV_bus_18
+      type: SimpleBattery
+    description: Each battery optimizes its local bus independently. Winter PV and load profiles with marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: winter_marae
+    marae_event: true
+    name: Local Control - Winter - With Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_winter
+      profile_file: pv_standard_profile.csv
+    season: winter
+
+  local_winter_no_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    control_strategy: local
+    controllers:
+    - battery_name: Battery_bus10
+      bus: bus_10lv
+      bus_label: bus_10lv
+      local_loads:
+      - load_bus10_kw
+      pv_name: PV_bus_10
+      type: SimpleBattery
+    - battery_name: Battery_bus18
+      bus: bus_18lv
+      bus_label: bus_18lv
+      local_loads:
+      - load_bus18_kw
+      pv_name: PV_bus_18
+      type: SimpleBattery
+    description: Each battery optimizes its local bus independently. Winter PV and load profiles without marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: winter_no_marae
+    marae_event: false
+    name: Local Control - Winter - No Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_winter
+      profile_file: pv_standard_profile.csv
+    season: winter
+
+  tou_summer_no_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    control_strategy: tou
+    controllers:
+    - battery_name: Battery_bus10
+      bus: bus_10lv
+      bus_label: bus_10lv
+      local_loads:
+      - load_bus4_kw
+      - load_bus10_kw
+      - load_bus11_kw
+      pv_name: PV_bus_10
+      type: TimeOfUseBattery
+    - battery_name: Battery_bus18
+      bus: bus_18lv
+      bus_label: bus_18lv
+      local_loads:
+      - load_bus17_kw
+      - load_bus18_kw
+      - load_bus20_kw
+      - load_bus21_kw
+      pv_name: PV_bus_18
+      type: TimeOfUseBattery
+    description: Batteries charge during off-peak hours and discharge during peak hours. Summer profiles without marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: summer_no_marae
+    marae_event: false
+    name: Time-of-Use Control - Summer - No Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_summer
+      profile_file: pv_standard_profile.csv
+    season: summer
+
+  tou_summer_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    control_strategy: tou
+    controllers:
+    - battery_name: Battery_bus10
+      bus: bus_10lv
+      bus_label: bus_10lv
+      local_loads:
+      - load_bus4_kw
+      - load_bus10_kw
+      - load_bus11_kw
+      pv_name: PV_bus_10
+      type: TimeOfUseBattery
+    - battery_name: Battery_bus18
+      bus: bus_18lv
+      bus_label: bus_18lv
+      local_loads:
+      - load_bus17_kw
+      - load_bus18_kw
+      - load_bus20_kw
+      - load_bus21_kw
+      pv_name: PV_bus_18
+      type: TimeOfUseBattery
+    description: Batteries charge during off-peak hours and discharge during peak hours. Summer profiles with marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: summer_marae
+    marae_event: true
+    name: Time-of-Use Control - Summer - Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_summer
+      profile_file: pv_standard_profile.csv
+    season: summer
+
+  tou_winter_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    control_strategy: tou
+    controllers:
+    - battery_name: Battery_bus10
+      bus: bus_10lv
+      bus_label: bus_10lv
+      local_loads:
+      - load_bus4_kw
+      - load_bus10_kw
+      - load_bus11_kw
+      pv_name: PV_bus_10
+      type: TimeOfUseBattery
+    - battery_name: Battery_bus18
+      bus: bus_18lv
+      bus_label: bus_18lv
+      local_loads:
+      - load_bus17_kw
+      - load_bus18_kw
+      - load_bus20_kw
+      - load_bus21_kw
+      pv_name: PV_bus_18
+      type: TimeOfUseBattery
+    description: Batteries charge during off-peak hours and discharge during peak hours. Winter profiles with marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: winter_marae
+    marae_event: true
+    name: Time-of-Use Control - Winter - With Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_winter
+      profile_file: pv_standard_profile.csv
+    season: winter
+
+  tou_winter_no_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    control_strategy: tou
+    controllers:
+    - battery_name: Battery_bus10
+      bus: bus_10lv
+      bus_label: bus_10lv
+      local_loads:
+      - load_bus4_kw
+      - load_bus10_kw
+      - load_bus11_kw
+      pv_name: PV_bus_10
+      type: TimeOfUseBattery
+    - battery_name: Battery_bus18
+      bus: bus_18lv
+      bus_label: bus_18lv
+      local_loads:
+      - load_bus17_kw
+      - load_bus18_kw
+      - load_bus20_kw
+      - load_bus21_kw
+      pv_name: PV_bus_18
+      type: TimeOfUseBattery
+    description: Batteries charge during off-peak hours and discharge during peak hours. Winter profiles without marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: winter_no_marae
+    marae_event: false
+    name: Time-of-Use Control - Winter - No Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_winter
+      profile_file: pv_standard_profile.csv
+    season: winter
+
+  optimized_summer_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    controllers:
+    - battery1_name: Battery_bus10
+      battery2_name: Battery_bus18
+      type: OptimizedBatteryController
+      schedule_file: summer_marae_optimization_results.xlsx
+    description: Applies pre-computed battery schedules from standalone optimizer. Summer profiles with marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: summer_marae
+    marae_event: true
+    name:  Optimization - Summer - With Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_summer
+      profile_file: pv_standard_profile.csv
+    season: summer
+
+  optimized_summer_no_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    controllers:
+    - battery1_name: Battery_bus10
+      battery2_name: Battery_bus18
+      type: OptimizedBatteryController
+      schedule_file: summer_no_marae_optimization_results.xlsx
+    description: Applies pre-computed battery schedules from standalone optimizer. Summer profiles without marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: summer_no_marae
+    marae_event: false
+    name: Optimization - Summer - No Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_summer
+      profile_file: pv_standard_profile.csv
+    season: summer
+
+  optimized_winter_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    controllers:
+    - battery1_name: Battery_bus10
+      battery2_name: Battery_bus18
+      type: OptimizedBatteryController
+      schedule_file: winter_marae_optimization_results.xlsx
+    description: Applies pre-computed battery schedules from standalone optimizer. Winter profiles with marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: winter_marae
+    marae_event: true
+    name: Optimization - Winter - With Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_winter
+      profile_file: pv_standard_profile.csv
+    season: winter
+
+  optimized_winter_no_marae:
+    batteries:
+    - bus: bus_10lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus10
+      soc_initial: 50
+    - bus: bus_18lv
+      efficiency: 0.9
+      max_e_mwh: 0.02
+      max_p_mw: 0.005
+      name: Battery_bus18
+      soc_initial: 50
+    controllers:
+    - battery1_name: Battery_bus10
+      battery2_name: Battery_bus18
+      type: OptimizedBatteryController
+      schedule_file: winter_no_marae_optimization_results.xlsx
+    description: Applies pre-computed battery schedules from standalone optimizer. Winter profiles without marae event.
+    loads:
+      enabled_loads: null
+      profile_file: loads_profile.xlsx
+      sheet_name: winter_no_marae
+    marae_event: false
+    name: Optimization - Winter - No Marae Event
+    pv_systems:
+      delimiter: ;
+      profile_column: capacity_factor_winter
+      profile_file: pv_standard_profile.csv
+    season: winter
+
+

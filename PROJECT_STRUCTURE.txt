@@ -1,0 +1,372 @@
+================================================================================
+MAKARIKA MICROGRID SIMULATION PROJECT - FILE STRUCTURE
+================================================================================
+
+PROJECT OVERVIEW
+----------------
+This project simulates a Tairāwhiti microgrid with battery energy storage systems,
+comparing three control strategies (Local, Time-of-Use, Optimized) across different
+seasonal and event conditions using Monte Carlo stochastic analysis.
+
+================================================================================
+DIRECTORY STRUCTURE
+================================================================================
+
+code/
+│
+├── config/
+│   └── scenario_definitions.yaml          # Main configuration file for all scenarios
+│                                           # Defines battery specs, controller settings,
+│                                           # load profiles, and market parameters
+│
+├── controllers/
+│   ├── __init__.py
+│   ├── controller_factory.py              # Factory pattern for creating controllers
+│   ├── local_battery.py                   # Simple voltage-based local control
+│   ├── time_of_use_battery.py             # Price-responsive TOU control
+│   └── coordinated_battery.py             # Optimized battery controller
+│
+├── models/
+│   ├── __init__.py
+│   └── network_manager.py                 # Builds pandapower network from CSV files
+│                                           # Manages network topology (buses, lines, loads)
+│
+├── scenarios/
+│   ├── __init__.py
+│   └── scenario_manager.py                # Loads scenarios from YAML
+│                                           # Manages load/PV profiles and configurations
+│
+├── simulation/
+│   ├── __init__.py
+│   └── simulator.py                       # Core time-series simulation engine
+│                                           # Runs power flow analysis with controllers
+│
+├── utils/
+│   ├── __init__.py
+│   ├── cost_calculator.py                 # Economic analysis with TOU tariffs
+│   └── stochastic_profiles.py             # Generates stochastic load/PV variations
+│
+├── visualization/
+│   ├── __init__.py
+│   ├── network_map.py                     # Creates interactive Folium network map
+│   └── create_visualizations.py           # Generates analysis plots and charts
+│
+├── venv/
+│   └── data/                              # DATA FILES (REQUIRED)
+│       ├── network_waipiro_buses.csv      # Bus definitions (voltage, coordinates)
+│       ├── network_waipiro_lines.csv      # Line connections and impedances
+│       ├── network_waipiro_loads.csv      # Load locations and specs
+│       ├── network_waipiro_trafos.csv     # Transformer specifications
+│       ├── loads_profile.xlsx             # Time-series load data (multiple sheets)
+│       └── pv_standard_profile.csv        # PV generation capacity factors
+│
+├── main.py                                # Single scenario execution entry point
+├── streamlit_app.py                       # Interactive web dashboard (1271 lines)
+├── standalone_optimizer.py                # CVXPY-based perfect foresight optimizer
+├── run_stochastic_monte_carlo.py          # Stochastic analysis for ONE scenario
+├── run_all_stochastic_scenarios.py        # Runs ALL 12 scenarios with 100 variations each
+└── requirements.txt                       # Python dependencies (to be created)
+
+================================================================================
+KEY FILES EXPLAINED
+================================================================================
+
+ENTRY POINTS (3 ways to run the project)
+-----------------------------------------
+1. main.py
+   - Run a single scenario simulation
+   - Usage: python main.py
+   - Edit the file to select which scenario to run
+
+2. streamlit_app.py
+   - Interactive web dashboard with real-time visualization
+   - Usage: streamlit run streamlit_app.py
+   - Access at http://localhost:8501
+   - Features: scenario selection, network map, cost analysis, voltage plots
+
+3. run_stochastic_monte_carlo.py
+   - Run 100 stochastic variations of a scenario
+   - Usage: python run_stochastic_monte_carlo.py --scenario local_summer_no_marae --n 100
+   - Generates statistical distributions of costs and performance
+
+4. run_all_stochastic_scenarios.py
+   - Automated analysis of all 12 scenarios
+   - Generates violin plots comparing all strategies
+   - Usage: python run_all_stochastic_scenarios.py
+
+OPTIMIZATION
+------------
+standalone_optimizer.py
+   - Mathematical optimization using CVXPY
+   - Perfect foresight battery scheduling
+   - Minimizes total electricity costs
+   - Exports schedules to Excel files
+
+CONFIGURATION
+-------------
+config/scenario_definitions.yaml
+   - Central configuration for all scenarios
+   - Defines 12 scenarios: 3 controllers × 2 seasons × 2 events
+   - Contains battery specs, market prices, controller parameters
+   - Uses YAML format with UTF-8 encoding
+
+CONTROLLERS (Battery Control Strategies)
+-----------------------------------------
+1. local_battery.py (SimpleBattery)
+   - Autonomous voltage-based control
+   - Charges when voltage high (excess PV)
+   - Discharges when voltage low (high demand)
+
+2. time_of_use_battery.py (TimeOfUseBattery)
+   - Responds to electricity price signals
+   - Charges during off-peak hours (cheap)
+   - Discharges during peak hours (expensive)
+
+3. coordinated_battery.py (OptimizedBatteryController)
+   - Follows pre-computed optimal schedules
+   - Uses results from standalone_optimizer.py
+   - Perfect foresight scheduling
+
+CORE SIMULATION
+---------------
+simulation/simulator.py
+   - Main simulation loop (96 timesteps = 24 hours × 15-min intervals)
+   - Calls pandapower for power flow analysis
+   - Integrates controller decisions
+   - Tracks SOC, power flows, voltages, costs
+
+models/network_manager.py
+   - Builds electrical network model
+   - Creates pandapower net object
+   - Loads network topology from CSV files
+   - Manages bus/line/transformer/load/PV data
+
+scenarios/scenario_manager.py
+   - Loads scenario definitions from YAML
+   - Manages load profiles (summer/winter, with/without marae event)
+   - Manages PV profiles (seasonal capacity factors)
+   - Applies scenario-specific configurations
+
+ANALYSIS TOOLS
+--------------
+utils/cost_calculator.py
+   - Calculates electricity costs
+   - Time-of-Use tariff structure
+   - Import/export pricing
+   - Peak/off-peak hour definitions
+
+utils/stochastic_profiles.py
+   - Generates Gaussian noise for Monte Carlo
+   - Load variations: ±10% (1 std dev)
+   - PV variations: ±20% (1 std dev)
+   - Creates multiple realistic scenarios
+
+visualization/network_map.py
+   - Interactive Folium map of network
+   - Shows bus locations, voltage levels
+   - Color-coded by voltage magnitude
+   - Clickable elements with data
+
+visualization/create_visualizations.py
+   - Generates analysis plots
+   - Voltage profiles, SOC trajectories
+   - Cost breakdowns, power flows
+   - Uses matplotlib/plotly
+
+================================================================================
+DATA FILES (venv/data/)
+================================================================================
+
+REQUIRED FILES:
+1. network_waipiro_buses.csv
+   - Columns: name, vn_kv, lat, lon
+   - Defines all network buses with voltage levels and GPS coordinates
+
+2. network_waipiro_lines.csv
+   - Columns: from_bus, to_bus, length_km, r_ohm_per_km, x_ohm_per_km, c_nf_per_km, max_i_ka
+   - Defines electrical connections between buses
+
+3. network_waipiro_loads.csv
+   - Columns: bus, name, type
+   - Maps loads to specific buses
+
+4. network_waipiro_trafos.csv
+   - Columns: hv_bus, lv_bus, sn_mva, vn_hv_kv, vn_lv_kv, vk_percent, vkr_percent
+   - Transformer specifications (11kV MV to 415V LV)
+
+5. loads_profile.xlsx
+   - Multiple sheets: summer_no_marae, summer_marae, winter_no_marae, winter_marae
+   - 96 rows (15-minute intervals for 24 hours)
+   - Columns for each load (e.g., load_bus10_kw, load_bus18_kw)
+
+6. pv_standard_profile.csv
+   - Columns: hour, capacity_factor_summer, capacity_factor_winter
+   - PV generation capacity factors (0-1 range)
+
+================================================================================
+SCENARIO DEFINITIONS
+================================================================================
+
+The project includes 12 scenarios combining:
+- 3 Control Strategies: Local, Time-of-Use, Optimized
+- 2 Seasons: Summer, Winter
+- 2 Events: With/Without Marae Event
+
+SCENARIOS:
+1. local_summer_no_marae      - Local control, summer, no event
+2. local_summer_marae          - Local control, summer, marae event
+3. local_winter_no_marae       - Local control, winter, no event
+4. local_winter_marae          - Local control, winter, marae event
+5. tou_summer_no_marae         - TOU control, summer, no event
+6. tou_summer_marae            - TOU control, summer, marae event
+7. tou_winter_no_marae         - TOU control, winter, no event
+8. tou_winter_marae            - TOU control, winter, marae event
+9. optimized_summer_no_marae   - Optimized, summer, no event
+10. optimized_summer_marae     - Optimized, summer, marae event
+11. optimized_winter_no_marae  - Optimized, winter, no event
+12. optimized_winter_marae     - Optimized, winter, marae event
+
+================================================================================
+HOW TO UPLOAD TO GITHUB
+================================================================================
+
+STEP 1: PREPARE YOUR PROJECT
+-----------------------------
+1. Create a .gitignore file in the project root:
+
+   __pycache__/
+   *.py[cod]
+   *$py.class
+   *.so
+   .Python
+   venv/
+   !venv/data/
+   *.ipynb_checkpoints
+   .DS_Store
+   results/
+   optimizer_results/
+   *.xlsx
+   *.csv
+   !venv/data/*.csv
+   !venv/data/*.xlsx
+
+2. Create a requirements.txt file:
+   - Run: pip freeze > requirements.txt
+   - Or manually create with key dependencies:
+     pandapower>=2.14.0
+     streamlit>=1.30.0
+     cvxpy>=1.4.0
+     numpy>=1.24.0
+     pandas>=2.0.0
+     matplotlib>=3.7.0
+     plotly>=5.18.0
+     pyyaml>=6.0
+     folium>=0.15.0
+     streamlit-folium>=0.15.0
+
+3. Create a README.md file (see below for template)
+
+STEP 2: INITIALIZE GIT REPOSITORY
+----------------------------------
+Open PowerShell in your project directory:
+
+   cd "C:\Users\julia\Documents\AA- Master SET\internship\code"
+   git init
+
+STEP 3: ADD FILES TO GIT
+-------------------------
+   git add .
+   git status                    # Check what will be committed
+   git commit -m "Initial commit: Makarika microgrid simulation project"
+
+STEP 4: CREATE GITHUB REPOSITORY
+---------------------------------
+1. Go to https://github.com
+2. Click "New repository" (+ icon, top right)
+3. Name: "makarika-microgrid-simulation" (or your choice)
+4. Description: "Battery energy storage simulation for Tairāwhiti microgrid"
+5. Choose Public or Private
+6. Do NOT initialize with README (you already have one)
+7. Click "Create repository"
+
+STEP 5: LINK LOCAL REPO TO GITHUB
+----------------------------------
+GitHub will show you commands like these (use YOUR username):
+
+   git remote add origin https://github.com/YOUR-USERNAME/makarika-microgrid-simulation.git
+   git branch -M main
+   git push -u origin main
+
+Enter your GitHub credentials when prompted.
+
+STEP 6: VERIFY UPLOAD
+----------------------
+1. Go to your GitHub repository page
+2. Check that all files are visible
+3. Verify README.md displays correctly
+4. Check that venv/data/ folder contains CSV/Excel files
+
+OPTIONAL: CREATE RELEASE
+-------------------------
+1. Go to your GitHub repo
+2. Click "Releases" → "Create a new release"
+3. Tag version: v1.0.0
+4. Release title: "Initial Release - Microgrid Simulation Framework"
+5. Add release notes describing the project
+6. Publish release
+
+================================================================================
+FUTURE USERS: HOW TO USE THIS PROJECT
+================================================================================
+
+SETUP:
+1. Clone repository:
+   git clone https://github.com/YOUR-USERNAME/makarika-microgrid-simulation.git
+   cd makarika-microgrid-simulation
+
+2. Create virtual environment:
+   python -m venv venv
+   venv\Scripts\activate  (Windows)
+   source venv/bin/activate  (Mac/Linux)
+
+3. Install dependencies:
+   pip install -r requirements.txt
+
+4. Verify data files exist in venv/data/
+
+USAGE:
+1. Interactive Dashboard:
+   streamlit run streamlit_app.py
+
+2. Single Scenario:
+   python main.py
+
+3. Stochastic Analysis:
+   python run_stochastic_monte_carlo.py --scenario local_summer_no_marae --n 100
+
+4. Full Analysis (12 scenarios):
+   python run_all_stochastic_scenarios.py
+
+================================================================================
+NOTES
+================================================================================
+
+- All YAML files use UTF-8 encoding
+- Simulation uses 15-minute timesteps (96 steps per day)
+- Battery capacity: 20 kWh (2 batteries)
+- Battery power: 5 kW max charge/discharge
+- Network: 11kV MV, 415V LV, 2 transformers
+- Time-of-Use prices: Peak $0.33/kWh, Off-peak $0.23/kWh, Export $0.13/kWh
+
+================================================================================
+CONTACT & LICENSE
+================================================================================
+
+Author: [Your Name]
+Institution: [Your Institution]
+Project: Tairāwhiti Microgrid Energy Storage Optimization
+Date: December 2025
+
+License: [Choose: MIT, GPL, Apache, etc.]
+
+================================================================================
