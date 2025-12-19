@@ -1,0 +1,5 @@
+﻿trafo_id;y_coord;x_coord;type;vn_kv;sn_mva;name;Lat (deg);Lat (min);Lat (s);Lat (dir);lon(deg);lon(min);lon(s);lon (dir)
+bus_trafo1_mv;-37.94861111;178.2488889;MV_LV;11;0.1;trafo1;37;56;55;s;178;14;56;e
+bus_trafo1_lv;-37.94861111;178.2488889;;0.4;0.1;trafo1;37;56;55;s;178;14;56;e
+bus_trafo2_mv;-37.95361111;178.2436111;;11;0.1;trafo2;37;57;13;s;178;14;37;e
+bus_trafo2_lv;-37.95361111;178.2991667;;0.4;0.1;trafo2;37;57;13;s;178;14;237;e

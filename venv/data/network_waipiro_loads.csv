@@ -1,0 +1,8 @@
+﻿load_id;power_kw;bus_id
+load_bus4_kw;5;bus_4lv
+load_bus10_kw;6;bus_10lv
+load_bus11_kw;4;bus_11lv
+load_bus17_kw;3;bus_17lv
+load_bus18_kw;2;bus_18lv
+load_bus20_kw;4;bus_20lv
+load_bus21_kw;5;bus_21lv
